@@ -66,7 +66,6 @@ function spanRenderer(value, delay) {
     return;
   }
   delay++;
-  console.log(value);
   if (value > 30000) {
     const html = [...Array(30000)]
       .map(() => `<span class="span"> ${randomNumberGenerator()} </span>`)
