@@ -3,16 +3,17 @@ const button = document.querySelector(".form_button");
 const input = document.querySelector(".form_input");
 const container = document.querySelector(".container");
 const debouncedRender = debounce(spanRenderer, 50);
-
+const timeout = [];
 form.addEventListener("submit", formApplyHandler);
 button.addEventListener("click", formApplyHandler);
 
 function formApplyHandler(event) {
   event.preventDefault();
+  clearTimeouts();
   let value = inputValidator(Number(input.value));
   !value && errorHandlerDisplay();
   nullifier();
-  spanRenderer(value, "");
+  spanRenderer(value, 0);
 }
 function randomNumberGenerator() {
   return Math.floor(Math.random() * 10);
@@ -26,21 +27,25 @@ function nullifier() {
   container.innerHTML = "";
 }
 
-function spanRenderer(value) {
+function spanRenderer(value, delay) {
   if (!value) {
     return;
   }
-  if (value > 20000) {
-    container.innerHTML += [...Array(20000)]
+  delay++;
+  console.log(value);
+  if (value > 30000) {
+    const html = [...Array(30000)]
       .map(() => `<span class="span"> ${randomNumberGenerator()} </span>`)
       .join("");
+    container.insertAdjacentHTML("beforeend", html);
     setTimeout(() => {
-      spanRenderer(value - 20000);
-    }, 0);
+      spanRenderer(value - 30000);
+    }, delay);
   } else {
-    container.innerHTML += [...Array(value)]
+    const html = [...Array(value)]
       .map(() => `<span class="span"> ${randomNumberGenerator()} </span>`)
       .join("");
+    container.insertAdjacentHTML("beforeend", html);
   }
 }
 function errorHandlerDisplay() {
@@ -55,7 +60,19 @@ function debounce(f, ms) {
     setTimeout(() => (isCooldown = false), ms);
   };
 }
+const timeouts = [];
+const originalTimeoutFn = window.setTimeout;
 
+window.setTimeout = function (fn, delay) {
+  const t = originalTimeoutFn(fn, delay);
+  timeouts.push(t);
+};
+
+function clearTimeouts() {
+  while (timeouts.length) {
+    clearTimeout(timeouts.pop());
+  }
+}
 // if (!value) {
 //   return;
 // }
