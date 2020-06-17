@@ -40,7 +40,6 @@ function randomNumberGenerator() {
  * @returns {boolean} false
  */
 function inputValidator(value) {
-  console.log(value)
   if (isFinite(value) && !isNaN(value) && value >= 0) return value;
   return false;
 }
